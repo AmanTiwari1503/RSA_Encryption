@@ -35,12 +35,12 @@ void generate_prime(mpz_t prime_value, int bits){
 	while(true)
 	{
 		mpz_urandomb(prime_value,state,bits);
-    	//generate_random_number(prime_value, bits);
-    	int p = mpz_probab_prime_p(prime_value, 50);
-    	if (p==2 || p==1)
-          	break;
-      	else
-      		continue;
+		//generate_random_number(prime_value, bits);
+		int p = mpz_probab_prime_p(prime_value, 50);
+		if (p==2 || p==1)
+			break;
+		else
+			continue;
 	}
 	gmp_randclear(state);
 }
