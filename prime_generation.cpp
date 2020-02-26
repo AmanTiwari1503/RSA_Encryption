@@ -1,10 +1,5 @@
 #include <gmp.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <iostream>
 #include <unistd.h>
-#include <tuple>
 #include <bits/stdc++.h>
 using namespace std;
 
