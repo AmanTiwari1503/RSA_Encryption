@@ -1,22 +1,62 @@
+#include <bits/stdc++.h>
 #include <gmp.h>
 #include <unistd.h>
-#include <bits/stdc++.h>
+#include <cstdio>
 using namespace std;
 
 void generate_keys(mpz_t e, mpz_t d, mpz_t n);
 void generate_prime(mpz_t prime_value, int bits);
 void generate_random_number(mpz_t r_number, int size);
-void build_dictionary(mpz_t dict[][3], int c_size);
+void build_dictionary(mpz_t dict[][2], mpz_t p_key[],int c_size);
 
-void build_dictionary(mpz_t dict[][3], int c_size){
+int main()
+{
+	FILE *dic;
+	FILE *pri;
+	int companies = 0;
+	printf("Enter the number of companies:");
+	cin>>companies;
+	mpz_t dict[companies][2],p_key[companies];
+	build_dictionary(dict,p_key,companies);
+	dic = fopen("directory.txt","w");
+	pri = fopen("private.txt","w");
+	fprintf(dic, "Directory:\n");
+	int k = 0;
+	try{
+		for(int i=0;i<companies;i++)
+		{
+			fprintf(dic,"Company %d\n",(i+1));
+			fprintf(dic,"Public Keys:\ne:");
+			k = mpz_out_str(dic,10,dict[i][0]);
+			if(k==0)
+				throw "Error occured while input-output operation";
+			fprintf(dic, "\nn:");
+			k = mpz_out_str(dic,10,dict[i][1]);
+			if(k==0)
+				throw "Error occured while input-output operation";
+			fprintf(dic, "\n");
+			fprintf(pri,"Company %d\n",(i+1));
+			fprintf(pri, "Private Key:\nd:");
+			k = mpz_out_str(pri,10,p_key[i]);
+			if(k==0)
+				throw "Error occured while input-output operation";
+			fprintf(pri, "\n");
+		}		
+	}
+	catch(string e)
+	{
+		cout<<e<<"\n";
+	}
+	fclose(dic);
+	fclose(pri);
+}
+
+void build_dictionary(mpz_t dict[][2], mpz_t p_key[], int c_size){
 	mpz_t e,d,n;
 	for(int i=0;i<c_size;i++)
 	{
-		mpz_inits(dict[i][0],dict[i][1],dict[i][2], NULL);
-		generate_keys(dict[i][0],dict[i][1],dict[i][2]);
-		printf("Company %d\n",(i+1));
-		gmp_printf("Public Keys:\ne:%Zd\nn:%Zd\n",dict[i][0], dict[i][2]);
-		gmp_printf("Private Key:\nd:%Zd\n",dict[i][1]);
+		mpz_inits(dict[i][0],p_key[i],dict[i][1], NULL);
+		generate_keys(dict[i][0],p_key[i],dict[i][1]);
 	}
 }
 
