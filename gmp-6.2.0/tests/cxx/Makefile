@@ -104,17 +104,17 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = kabylake-pc-linux-gnu
 host_triplet = kabylake-pc-linux-gnu
-#check_PROGRAMS = t-binary$(EXEEXT) t-cast$(EXEEXT) \
-#	t-cxx11$(EXEEXT) t-headers$(EXEEXT) \
-#	t-iostream$(EXEEXT) t-istream$(EXEEXT) \
-#	t-locale$(EXEEXT) t-misc$(EXEEXT) \
-#	t-mix$(EXEEXT) t-ops$(EXEEXT) t-ops2qf$(EXEEXT) \
-#	t-ops2f$(EXEEXT) t-ops3$(EXEEXT) \
-#	t-ostream$(EXEEXT) t-prec$(EXEEXT) \
-#	t-ternary$(EXEEXT) t-unary$(EXEEXT) \
-#	t-do-exceptions-work-at-all-with-this-compiler$(EXEEXT) \
-#	t-ops2z$(EXEEXT) t-assign$(EXEEXT) \
-#	t-constr$(EXEEXT) t-rand$(EXEEXT)
+check_PROGRAMS = t-binary$(EXEEXT) t-cast$(EXEEXT) \
+	t-cxx11$(EXEEXT) t-headers$(EXEEXT) \
+	t-iostream$(EXEEXT) t-istream$(EXEEXT) \
+	t-locale$(EXEEXT) t-misc$(EXEEXT) \
+	t-mix$(EXEEXT) t-ops$(EXEEXT) t-ops2qf$(EXEEXT) \
+	t-ops2f$(EXEEXT) t-ops3$(EXEEXT) \
+	t-ostream$(EXEEXT) t-prec$(EXEEXT) \
+	t-ternary$(EXEEXT) t-unary$(EXEEXT) \
+	t-do-exceptions-work-at-all-with-this-compiler$(EXEEXT) \
+	t-ops2z$(EXEEXT) t-assign$(EXEEXT) \
+	t-constr$(EXEEXT) t-rand$(EXEEXT)
 subdir = tests/cxx
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
@@ -561,9 +561,9 @@ CFLAGS = -O2 -pedantic -fomit-frame-pointer -m64 -mtune=skylake -march=broadwell
 CPP = gcc -E
 CPPFLAGS = 
 CPP_FOR_BUILD = gcc -E
-CXX = 
-CXXCPP = 
-CXXFLAGS = 
+CXX = g++
+CXXCPP = g++ -E
+CXXFLAGS = -O2 -pedantic -fomit-frame-pointer -m64 -mtune=skylake -march=broadwell
 CYGPATH_W = echo
 DEFN_LONG_LONG_LIMB = /* #undef _LONG_LONG_LIMB */
 DEFS = -DHAVE_CONFIG_H
@@ -655,7 +655,7 @@ abs_top_builddir = /mnt/d/Sem 6/COL759/Assignment2/RSA_Encryption/gmp-6.2.0
 abs_top_srcdir = /mnt/d/Sem 6/COL759/Assignment2/RSA_Encryption/gmp-6.2.0
 ac_ct_AR = ar
 ac_ct_CC = gcc
-ac_ct_CXX = 
+ac_ct_CXX = g++
 ac_ct_DUMPBIN = 
 am__leading_dot = .
 am__tar = $${TAR-tar} chof - "$$tardir"
@@ -718,7 +718,7 @@ LDADD = -L$(top_builddir)/.libs \
   $(top_builddir)/libgmp.la \
   -lm
 
-#TESTS = $(check_PROGRAMS)
+TESTS = $(check_PROGRAMS)
 EXTRA_DIST = t-ops2.h
 t_assign_SOURCES = t-assign.cc
 t_binary_SOURCES = t-binary.cc

@@ -766,9 +766,9 @@ CFLAGS = -O2 -pedantic -fomit-frame-pointer -m64 -mtune=skylake -march=broadwell
 CPP = gcc -E
 CPPFLAGS = 
 CPP_FOR_BUILD = gcc -E
-CXX = 
-CXXCPP = 
-CXXFLAGS = 
+CXX = g++
+CXXCPP = g++ -E
+CXXFLAGS = -O2 -pedantic -fomit-frame-pointer -m64 -mtune=skylake -march=broadwell
 CYGPATH_W = echo
 DEFN_LONG_LONG_LIMB = /* #undef _LONG_LONG_LIMB */
 DEFS = -DHAVE_CONFIG_H
@@ -860,7 +860,7 @@ abs_top_builddir = /mnt/d/Sem 6/COL759/Assignment2/RSA_Encryption/gmp-6.2.0
 abs_top_srcdir = /mnt/d/Sem 6/COL759/Assignment2/RSA_Encryption/gmp-6.2.0
 ac_ct_AR = ar
 ac_ct_CC = gcc
-ac_ct_CXX = 
+ac_ct_CXX = g++
 ac_ct_DUMPBIN = 
 am__leading_dot = .
 am__tar = $${TAR-tar} chof - "$$tardir"
