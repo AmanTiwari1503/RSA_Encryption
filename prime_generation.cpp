@@ -8,6 +8,7 @@ void generate_keys(mpz_t e, mpz_t d, mpz_t n);
 void generate_prime(mpz_t prime_value, int bits);
 void generate_random_number(mpz_t r_number, int size);
 void build_dictionary(mpz_t dict[][2], mpz_t p_key[],int c_size);
+void generate_strong_prime(mpz_t pf, mpz_t p1, mpz_t p2);
 
 int main()
 {
@@ -57,19 +58,25 @@ void build_dictionary(mpz_t dict[][2], mpz_t p_key[], int c_size){
 	{
 		mpz_inits(dict[i][0],p_key[i],dict[i][1], NULL);
 		generate_keys(dict[i][0],p_key[i],dict[i][1]);
+		gmp_printf("%Zd\n%Zd\n%Zd\n",dict[i][0],p_key[i],dict[i][1]);
 	}
 }
 
 void generate_keys(mpz_t e, mpz_t d, mpz_t n){
-	mpz_t p,q,one,phi_n;
-	mpz_inits(p,q,phi_n,NULL);
-	mpz_init_set_ui(one,1);
-	generate_prime(p,256);
-	usleep(3000000);
-	generate_prime(q,256);
+	mpz_t p,q,s,t,phi_n;
+	mpz_inits(p,q,s,t,phi_n,NULL);
+	generate_prime(s,256);
+	usleep(2000000);
+	generate_prime(t,256);
+	generate_strong_prime(p,s,t);
+	usleep(2000000);
+	generate_prime(s,256);
+	usleep(2000000);
+	generate_prime(t,256);
+	generate_strong_prime(q,s,t);
 	mpz_mul(n,p,q);
-	mpz_sub(p,p,one);
-	mpz_sub(q,q,one);
+	mpz_sub_ui(p,p,1);
+	mpz_sub_ui(q,q,1);
 	mpz_mul(phi_n,p,q);
 	while(true){
 		generate_random_number(e,500);
@@ -79,7 +86,7 @@ void generate_keys(mpz_t e, mpz_t d, mpz_t n){
 		else
 			break;
 	}
-	mpz_clears(p,q,one,phi_n,NULL);
+	mpz_clears(p,q,s,t,phi_n,NULL);
 }
 
 void generate_prime(mpz_t prime_value, int bits){
@@ -91,7 +98,7 @@ void generate_prime(mpz_t prime_value, int bits){
 	{
 		mpz_urandomb(prime_value,state,bits);
 		//generate_random_number(prime_value, bits);
-		int p = mpz_probab_prime_p(prime_value, 50);
+		int p = mpz_probab_prime_p(prime_value, 25);
 		if (p==2 || p==1)
 			break;
 		else
@@ -106,4 +113,48 @@ void generate_random_number(mpz_t r_number, int size){
 	gmp_randseed_ui(state,seed);
 	mpz_urandomb(r_number,state,size);
 	gmp_randclear(state);
+}
+
+void generate_strong_prime(mpz_t pf, mpz_t p1, mpz_t p2){
+	int i=1;
+	mpz_t r,p0,r1;
+	mpz_inits(r,p0,r1,NULL);
+	while(true)
+	{
+		cout<<i<<" ";
+		mpz_mul_ui(r,p2,2*i);
+		mpz_add_ui(r,r,1);
+		int p = mpz_probab_prime_p(r, 25);
+		if (p==2 || p==1)
+			break;
+		else
+		{
+			i = i+1;
+			continue;
+		}
+	}
+	cout<<"\n";
+	mpz_sub_ui(r1,r,2);
+	mpz_powm(p0,p1,r1,r);
+	mpz_mul_ui(p0,p0,2);
+	mpz_mod(p0,p0,r);	
+	mpz_mul(p0,p0,p1);
+	mpz_sub_ui(p0,p0,1);
+	i = 1;
+	while(true)
+	{
+		cout<<i<<" ";
+		mpz_mul(pf,r,p1);
+		mpz_mul_ui(pf,pf,2*i);
+		mpz_add(pf,pf,p0);
+		int p = mpz_probab_prime_p(pf, 25);
+		if (p==2 || p==1)
+			break;
+		else
+		{
+			i = i+1;
+			continue;
+		}
+	}
+	mpz_clears(r,p0,r1,NULL);
 }
