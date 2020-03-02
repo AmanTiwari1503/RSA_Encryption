@@ -8,7 +8,7 @@ void generate_keys(mpz_t e, mpz_t d, mpz_t n);
 void generate_prime(mpz_t prime_value, int bits);
 void generate_random_number(mpz_t r_number, int size);
 void build_dictionary(mpz_t dict[][2], mpz_t p_key[],int c_size);
-void generate_strong_prime(mpz_t pf, mpz_t p1, mpz_t p2);
+int generate_strong_prime(mpz_t pf, mpz_t p1, mpz_t p2);
 
 int main()
 {
@@ -65,21 +65,31 @@ void build_dictionary(mpz_t dict[][2], mpz_t p_key[], int c_size){
 void generate_keys(mpz_t e, mpz_t d, mpz_t n){
 	mpz_t p,q,s,t,phi_n;
 	mpz_inits(p,q,s,t,phi_n,NULL);
-	generate_prime(s,256);
-	usleep(2000000);
-	generate_prime(t,256);
-	generate_strong_prime(p,s,t);
-	usleep(2000000);
-	generate_prime(s,256);
-	usleep(2000000);
-	generate_prime(t,256);
-	generate_strong_prime(q,s,t);
+	while(true)
+	{
+		generate_prime(s,256);
+		usleep(1000000);
+		generate_prime(t,256);
+		int check = generate_strong_prime(p,s,t);
+		if(check == 1)
+			break;
+	}
+	usleep(1000000);
+	while(true)
+	{
+		generate_prime(s,256);
+		usleep(1000000);
+		generate_prime(t,256);
+		int check = generate_strong_prime(q,s,t);
+		if(check == 1)
+			break;
+	}
 	mpz_mul(n,p,q);
 	mpz_sub_ui(p,p,1);
 	mpz_sub_ui(q,q,1);
 	mpz_mul(phi_n,p,q);
 	while(true){
-		generate_random_number(e,500);
+		generate_random_number(e,1010);
 		int p = mpz_invert(d,e,phi_n);
 		if(p==0)
 			continue;
@@ -115,13 +125,12 @@ void generate_random_number(mpz_t r_number, int size){
 	gmp_randclear(state);
 }
 
-void generate_strong_prime(mpz_t pf, mpz_t p1, mpz_t p2){
+int generate_strong_prime(mpz_t pf, mpz_t p1, mpz_t p2){
 	int i=1;
 	mpz_t r,p0,r1;
 	mpz_inits(r,p0,r1,NULL);
 	while(true)
 	{
-		cout<<i<<" ";
 		mpz_mul_ui(r,p2,2*i);
 		mpz_add_ui(r,r,1);
 		int p = mpz_probab_prime_p(r, 25);
@@ -129,11 +138,14 @@ void generate_strong_prime(mpz_t pf, mpz_t p1, mpz_t p2){
 			break;
 		else
 		{
+			if(i>500)
+			{
+				return 0;
+			}
 			i = i+1;
 			continue;
 		}
-	}
-	cout<<"\n";
+	}	
 	mpz_sub_ui(r1,r,2);
 	mpz_powm(p0,p1,r1,r);
 	mpz_mul_ui(p0,p0,2);
@@ -152,9 +164,16 @@ void generate_strong_prime(mpz_t pf, mpz_t p1, mpz_t p2){
 			break;
 		else
 		{
+			if(i>500)
+			{
+				cout<<"\n";
+				return 0;
+			}
 			i = i+1;
 			continue;
 		}
 	}
+	cout<<"\n";
 	mpz_clears(r,p0,r1,NULL);
+	return 1;
 }
