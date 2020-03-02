@@ -117,25 +117,34 @@ int main(){
 	mpz_set(er,dict[rm][0]);mpz_set(nr,dict[rm][1]);mpz_set(dr,p_key[rm]);
 	int kr = determine_block_size(26,nr);
 	int ks = determine_block_size(26,ns);
-	cout<<ks<<" "<<kr<<"\n";
+	// cout<<ks<<" "<<kr<<"\n";
 	string m = "",tmp = "",c = "";int count = 0;
 	printf("Enter the message to be encrypted\n");
 	cin.ignore();
 	getline(cin,m);
-	cout<<m<<"\n";
 	// m = "she doesnt have anything to prove but she is going ANYWAY THATS her Character sHe kNoWs she doesnt have to but still i know that she is a very crafty person and i do not like to be in her influence";
 	transform(m.begin(), m.end(), m.begin(), ::tolower);
 	m = clean_string(m);
+	int clean_len = m.length();
 	string vig_key="";
-	// printf("Enter the key for vigenere cipher: ");
-	// cin>>vig_key;
-	vig_key = "Hellofella";
+	while(true)
+	{
+		printf("Enter the key for vigenere cipher(of length 10): ");
+		cin>>vig_key;
+		if(vig_key.length() != 10)
+		{
+			printf("\nInvalid key\n");
+		}
+		else
+			break;
+	}
+	// vig_key = "Hellofella";
 	transform(vig_key.begin(), vig_key.end(), vig_key.begin(), ::tolower);
 	m = vigenere_encrypt(m,vig_key);
 	m = vig_key+m;
 	m = form_message_string(m,ks);
 	int rep = m.length()/ks;
-	cout<<rep<<"\n";
+	// cout<<rep<<"\n";
 	string c1,c2,m1,m2;
 	if(ks==kr)
 	{
@@ -163,28 +172,34 @@ int main(){
 	}
 	else
 	{
+		char p1[2*rep]; 
 		m2 = form_encrypted_string(m,ks,ds,ns);
-		char p1 = m2.at(m2.length()-1);
-		char p2 = m2.at(m2.length()-2);
-		m2 = m2.substr(0,m2.length()-2);
+		for(int i=0;i<2*rep;i++)
+		{
+			p[i] = m2.at(m2.length()-(i+1));
+		}
+		m2 = m2.substr(0,m2.length()-(2*rep));
 		c1 = form_encrypted_string(m2,kr,er,nr);
 		m1 = form_decrypted_string(c1,kr,dr,nr);
-		m1 = m1+p2+p1;
+		for(int i=0;i<2*rep;i++)
+		{
+			m1 = m1+p[2*rep-1-i];
+		}
 		c2 = form_decrypted_string(m1,kr+1,es,ns);
 	}
-	// cout<<"Encrypted string: ";
-	cout<<m2<<" "<<m2.length()<<"\n";
-	cout<<c1<<" "<<c1.length()<<"\n";
-	// cout<<c1<<"\n";
-	cout<<m1<<" "<<m1.length()<<"\n";
-	cout<<c2<<" "<<c2.length()<<"\n";
+	cout<<"Encrypted string: \n";
+	// cout<<m2<<" "<<m2.length()<<"\n";
+	// cout<<c1<<" "<<c1.length()<<"\n";
+	cout<<c1<<"\n\n";
+	// cout<<m1<<" "<<m1.length()<<"\n";
+	// cout<<c2<<" "<<c2.length()<<"\n";
 
 	vig_key = c2.substr(0,10);
 	c2 = c2.substr(10,c2.length()-10);
 	m = vigenere_decrypt(c2,vig_key);
 	
 	cout<<"Decrypted string: ";
-	cout<<m<<"\n";
+	cout<<m.substr(0,clean_len)<<"\n";
 	mpz_clears(es,ds,ns,er,dr,nr,NULL);
 }
 
