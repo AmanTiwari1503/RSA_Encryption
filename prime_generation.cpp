@@ -155,7 +155,7 @@ int generate_strong_prime(mpz_t pf, mpz_t p1, mpz_t p2){
 	i = 1;
 	while(true)
 	{
-		cout<<i<<" ";
+		// cout<<i<<" ";
 		mpz_mul(pf,r,p1);
 		mpz_mul_ui(pf,pf,2*i);
 		mpz_add(pf,pf,p0);
@@ -166,14 +166,14 @@ int generate_strong_prime(mpz_t pf, mpz_t p1, mpz_t p2){
 		{
 			if(i>500)
 			{
-				cout<<"\n";
+				// cout<<"\n";
 				return 0;
 			}
 			i = i+1;
 			continue;
 		}
 	}
-	cout<<"\n";
+	// cout<<"\n";
 	mpz_clears(r,p0,r1,NULL);
 	return 1;
 }
